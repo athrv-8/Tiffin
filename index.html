@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tiffin Store — Sweet & Clean</title>
+<style>
+  :root{
+    --navy: #071940;         /* deep navy */
+    --pink: #ffd3e8;         /* baby pink */
+    --cream: #fff7ef;        /* creamy white */
+    --muted: #667085;
+    --glass: rgba(255,255,255,0.7);
+    --radius: 16px;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background: linear-gradient(180deg,var(--cream) 0%, #fff 100%);
+    color:var(--navy);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  .wrap{max-width:980px;margin:22px auto;padding:18px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{
+    display:flex;gap:12px;align-items:center;
+  }
+  .logo-bubble{
+    width:56px;height:56px;border-radius:14px;
+    background: linear-gradient(135deg,var(--navy), #0b2a5a);
+    display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:20px;box-shadow:0 8px 30px rgba(7,25,64,0.15);
+    border:3px solid var(--pink);
+  }
+  h1{margin:0;font-size:18px;letter-spacing:-0.2px}
+  .subtitle{font-size:13px;color:var(--muted);margin-top:4px}
+
+  /* search & nav */
+  .nav-actions{display:flex;gap:10px;align-items:center}
+  .pill{
+    background:var(--pink);padding:10px 14px;border-radius:999px;font-weight:700;color:var(--navy);
+    box-shadow:0 6px 18px rgba(11,38,80,0.06);
+  }
+  .cart{
+    background:linear-gradient(180deg,#ffffff, #f9f7f5);
+    border-radius:12px;padding:8px 10px;border:1px solid rgba(7,25,64,0.06);
+    display:flex;gap:8px;align-items:center;
+  }
+  .cart .count{background:var(--navy);color:white;padding:6px 9px;border-radius:999px;font-weight:700;font-size:13px}
+
+  /* grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+  .card{
+    background:var(--cream);
+    border-radius:14px;padding:12px;border:1px solid rgba(7,25,64,0.04);
+    box-shadow:0 10px 30px rgba(11,38,80,0.04);
+    transition:transform .22s ease, box-shadow .22s ease;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(11,38,80,0.08)}
+  .foodimg{height:140px;border-radius:10px;background:#eee;background-size:cover;background-position:center}
+  .title{font-weight:700}
+  .meta{font-size:13px;color:var(--muted)}
+  .price{color:var(--navy);font-weight:800}
+  .card-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+
+  /* footer actions */
+  footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px}
+  .checkout{background:var(--navy);color:white;padding:12px 16px;border-radius:12px;border:none;font-weight:800;cursor:pointer}
+  .clear{background:transparent;border:1px dashed rgba(7,25,64,0.06);padding:10px;border-radius:10px}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(7,25,64,0.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:90}
+  .overlay.show{display:flex}
+  .modal{width:100%;max-width:520px;background:linear-gradient(180deg,#fff,#fff7f2);padding:18px;border-radius:14px;box-shadow:0 30px 80px rgba(7,25,64,0.35)}
+  .modal h3{margin:0;font-size:16px}
+  .row{display:flex;gap:10px;align-items:center;margin-top:10px}
+  input[type="number"], textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(7,25,64,0.06);font-size:14px}
+  textarea{min-height:70px;resize:vertical}
+  .btn{padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+  .btn-primary{background:var(--navy);color:white}
+  .btn-soft{background:transparent;border:1px solid rgba(7,25,64,0.06)}
+  .btn-pink{background:var(--pink);color:var(--navy);font-weight:800}
+
+  /* small */
+  .small{font-size:13px;color:var(--muted)}
+
+  @media(max-width:520px){
+    .brand h1{font-size:16px}
+    .foodimg{height:120px}
+    .wrap{padding:12px}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo-bubble">T</div>
+        <div>
+          <h1>Twinkle Tiffins</h1>
+          <div class="subtitle">Ghar jaisa swad • Fresh every day • Delivered with love 🥰</div>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <div class="pill">Today's Special 🌸</div>
+        <div class="cart">
+          <div style="text-align:right">
+            <div class="small">Cart</div>
+            <div class="count" id="cartCount">0</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="small" style="margin-top:12px;color:var(--muted)">Tap any item to see details or quick-order — checkout goes to WhatsApp with clear cook-ready details.</div>
+
+      <div class="grid" id="itemsGrid"></div>
+
+      <footer>
+        <div class="small" id="cartSummary">0 items · ₹0</div>
+        <div style="display:flex;gap:10px">
+          <button class="clear" id="clearCart">Clear</button>
+          <button class="checkout" id="checkoutBtn">Checkout on WhatsApp</button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- modal -->
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <h3 id="modalTitle"></h3>
+          <div class="small" id="modalPrice"></div>
+        </div>
+        <button class="btn btn-soft" id="closeModal">Close</button>
+      </div>
+
+      <div class="row">
+        <label style="min-width:60px" class="small">Qty</label>
+        <input type="number" id="qty" min="1" value="1" />
+        <div style="margin-left:auto" class="small">Per plate shown above</div>
+      </div>
+
+      <div style="margin-top:10px">
+        <label class="small">Notes for cook</label>
+        <textarea id="notes" placeholder="E.g. less oil, no onion, extra chutney..."></textarea>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:12px;justify-content:space-between">
+        <button class="btn btn-pink" id="wantMore">➕ Want more</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-soft" id="notNow">Not now (Send this)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ===== CONFIG =====
+  const PHONE_NUMBER = "85956 71438"; // <-- replace with vendor number (no +)
+  const WA_BASE = "https://wa.me/" + PHONE_NUMBER + "?text=";
+
+  // ===== SAMPLE MENU (replace with real items) =====
+  const ITEMS = [
+    {id:'i1',name:'Homestyle Dal-Chawal',price:75,img:'https://images.unsplash.com/photo-1604908177522-7d004c5f4f2a?auto=format&w=800&q=60'},
+    {id:'i2',name:'Paneer Sabzi + Roti',price:125,img:'https://images.unsplash.com/photo-1604908177527-1c8b3b2f9ca1?auto=format&w=800&q=60'},
+    {id:'i3',name:'Veg Thali (Daily)',price:110,img:'https://images.unsplash.com/photo-1546069901-eacef0df6022?auto=format&w=800&q=60'},
+    {id:'i4',name:'Chicken Curry + Rice',price:160,img:'https://images.unsplash.com/photo-1604908177664-6a3b1f6f2d4f?auto=format&w=800&q=60'}
+  ];
+
+  // ===== STATE =====
+  const cart = [];
+
+  // ===== DOM =====
+  const grid = document.getElementById('itemsGrid');
+  const cartCount = document.getElementById('cartCount');
+  const cartSummary = document.getElementById('cartSummary');
+  const overlay = document.getElementById('overlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalPrice = document.getElementById('modalPrice');
+  const qtyEl = document.getElementById('qty');
+  const notesEl = document.getElementById('notes');
+  const wantMoreBtn = document.getElementById('wantMore');
+  const notNowBtn = document.getElementById('notNow');
+  const closeModal = document.getElementById('closeModal');
+
+  let active = null;
+
+  // populate
+  ITEMS.forEach(it=>{
+    const c = document.createElement('div'); c.className='card';
+    c.innerHTML = `
+      <div class="foodimg" style="background-image:url('${it.img}')"></div>
+      <div class="title">${it.name}</div>
+      <div class="meta">Fresh • Hygienic • Homestyle</div>
+      <div class="card-row">
+        <div><div class="price">₹ ${it.price}</div><div class="small">per plate</div></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-soft" onclick="openModal('${it.id}')">Details</button>
+          <button class="btn btn-primary" onclick="quickOrder('${it.id}')">Order</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(c);
+  });
+
+  function openModal(id){
+    const it = ITEMS.find(x=>x.id===id);
+    active = it;
+    modalTitle.textContent = it.name;
+    modalPrice.textContent = '₹ ' + it.price + ' per plate';
+    qtyEl.value = 1; notesEl.value = '';
+    overlay.classList.add('show');
+  }
+  closeModal.onclick = ()=> overlay.classList.remove('show');
+  overlay.onclick = (e)=> { if(e.target===overlay) overlay.classList.remove('show') }
+
+  function quickOrder(id){
+    const it = ITEMS.find(x=>x.id===id);
+    redirectWA([{name:it.name,qty:1,price:it.price,notes:''}]);
+  }
+
+  wantMoreBtn.onclick = ()=>{
+    if(!active) return;
+    const qty = Math.max(1, parseInt(qtyEl.value||1));
+    const notes = notesEl.value.trim();
+    cart.push({id:active.id,name:active.name,qty,price:active.price,notes});
+    updateCart();
+    overlay.classList.remove('show');
+  };
+
+  notNowBtn.onclick = ()=>{
+    if(!active) return;
+    const qty = Math.max(1, parseInt(qtyEl.value||1));
+    const notes = notesEl.value.trim();
+    redirectWA([{name:active.name,qty,price:active.price,notes}]);
+  };
+
+  document.getElementById('clearCart').onclick = ()=>{
+    cart.length = 0; updateCart();
+  };
+  document.getElementById('checkoutBtn').onclick = ()=>{
+    if(cart.length===0){ alert('Cart is empty. Add items or click an item to order.'); return; }
+    redirectWA(cart);
+  };
+
+  function updateCart(){
+    const totalQty = cart.reduce((s,i)=>s+i.qty,0);
+    const totalPrice = cart.reduce((s,i)=>s + i.qty*i.price,0);
+    cartCount.textContent = totalQty;
+    cartSummary.textContent = `${cart.length} items · ₹${totalPrice}`;
+  }
+
+  function redirectWA(items){
+    const lines = [];
+    lines.push('📦 *New Order — Twinkle Tiffins*');
+    lines.push('--------------------------------');
+    items.forEach((it,idx)=>{
+      const note = it.notes ? `\n    • Notes: ${it.notes}` : '';
+      lines.push(`${idx+1}. ${it.name} — Qty: ${it.qty} — ₹${it.price * it.qty}${note}`);
+    });
+    lines.push('--------------------------------');
+    lines.push('🕒 Preferred delivery time: _[e.g. 12:30 PM]_');
+    lines.push('📍 Delivery address: _[Type full address here]_');
+    lines.push('📞 Contact number: _[Type your no.]_');
+    lines.push('');
+    lines.push('Source: Website (store)');
+    const msg = encodeURIComponent(lines.join('\n'));
+    const url = WA_BASE + msg;
+    window.open(url,'_blank');
+  }
+
+  updateCart();
+</script>
+</body>
+  </html>
+  
